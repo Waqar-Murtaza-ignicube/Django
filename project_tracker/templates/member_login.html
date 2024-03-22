@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/morestyles.css' %}">
+</head>
+<body class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+    <section class=" flex m-20 shadow-2xl rounded-lg">
+        <div class="flex-1 p-10">
+            <h1 class="text-white text-4xl mb-4 font-semibold">Sign Up</h1>
+            <p class="text-white font-medium mb-4"> Your registration is almost done, please enter your email and set your password</p>
+            <form action="{% url 'memberlogin' %}" method='POST'>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-4">
+                        <label for="{{ field.id_for_label }}" class="text-white">{{ field.label }}</label>
+                        <br>
+                        {{ field }}
+                        {% if field.errors %}
+                            <p class="text-black">{{ field.errors|join:", " }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}  
+                <button class="bg-blue-500 shadow-xl pt-2 p-2 rounded-md text-white mt-3 mb-4" type='submit'>Submit</button>
+            </form>
+        </div>
+        <div class="flex-2">
+            <img class="rounded-tr-lg rounded-br-lg" src="../../../static/images/landing-page-login.jpg" alt="login-page-img">
+        </div>
+</section>
+</body>
+</html>

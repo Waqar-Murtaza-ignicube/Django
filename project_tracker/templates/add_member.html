@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Member</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/morestyles.css' %}">
+</head>
+<body class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+    <header class="container mx-auto text-white p-8" >
+        <nav class="flex justify-around font-medium">
+            <div class="font-semibold text-3xl flex-1">
+                <a class="decoration-0 " href="{% url 'home' %}">Project Tracker</a>
+            </div>
+            <ul class="decoration-0 flex gap-x-8">
+                <li ><a href="{% url 'home' %}">Clients</a></li>
+                <li ><a href="{% url 'projects' %}">Projects</a></li>
+                <li><a href="{% url 'team' %}">Team Members</a></li>
+                <li><a href="{% url 'track' %}">Track</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header> 
+    <section class="flex justify-center">
+        <div class="p-10 m-20 shadow-2xl rounded-lg w-30 ">
+            {% if myprojects %}
+            <h1 class="text-white text-4xl mb-7 font-semibold">New Member</h1>
+            <form action="create/" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-4">
+                    <label for="{{ field.id_for_label }}" class="text-white">{{ field.label }}</label>
+                    <br>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-black">{{ field.errors|join:", " }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+                <button class="bg-blue-500 shadow-xl p-2 rounded-md text-white" type='submit'>Submit</button>
+            </form>
+            {% else %}
+            <p class='text-center text-lg text-white'>Please add some projects first to add a new member.</p>
+            {% endif %}
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timesheet</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/morestyles.css' %}">
+</head>
+<body class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+    <header class="container mx-auto text-white p-8" >
+        <nav class="flex justify-around font-medium">
+            {% if group == 'Admin' %}
+            <div class="font-semibold text-3xl flex-1">
+                <a class="decoration-0" href="{% url 'home' %}">Project Tracker</a>
+            </div>
+            {% else %}
+            <div class="font-semibold text-3xl flex-1">
+                <a class="decoration-0" href="{% url 'track' %}">Project Tracker</a>
+            </div>
+            {% endif %}
+            <ul class="decoration-0 flex gap-x-8">
+                {% if group == 'Admin' %}
+                <li ><a href="{% url 'home' %}">Clients</a></li>
+                <li ><a href="{% url 'projects' %}">Projects</a></li>
+                <li><a href="{% url 'team' %}">Team Members</a></li>
+                <li><a href="{% url 'track' %}">Track</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li><a href="{% url 'track' %}">Track</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% endif %}
+            </ul> 
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-8">
+        <div class="flex justify-between mb-8" style="gap: 30px;">
+            <h1 class="text-white text-2xl font-medium">Register Hours</h1>
+        </div>
+        {% for message in messages %}
+            <div class="fixed">
+                {{ message }}
+                <span onclick="handleClick(this)" class="close-button">&times;</span>
+            </div>
+        {% endfor %}
+        <div class='bg-white rounded-md py-3 px-16 mb-7'>
+            <form method="post" class='flex items-center gap-x-10'>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div>
+                    <label for="time_spent">Time Spent:</label>
+                    <div class="flex gap-x-8">
+                        <select class="p-2 bg-gray-100 rounded-md" name="hours">
+                            <option value="0">0h</option>
+                            {% for i in "x"|rjust:"10" %}
+                                <option value="{{ forloop.counter }}">{{ forloop.counter }}h</option>
+                            {% endfor %}
+                        </select>
+                        <select class="p-2 bg-gray-100 rounded-md" name="minutes">
+                            <option value="0">0m</option>
+                            {% for i in "x"|rjust:"59" %}
+                                <option value="{{ forloop.counter }}">{{ forloop.counter }}m</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class='bg-blue-500 shadow-xl p-2 mt-6 rounded-md text-white'>Submit</button>
+            </form>
+        </div>
+        <div class='pb-8 text-white font-medium text-2xl'>Logged Entries</div>
+        <div class="rounded-md bg-white p-8">
+            <table>
+                {% if mytimesheet %}
+                <tr>
+                    <th>Project</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Action</th> 
+                </tr>
+                {% for timesheet in mytimesheet %}
+                <tr>
+                    <td>{{ timesheet.project }}</td>
+                    <td>{{ timesheet.date }}</td>
+                    <td>{{ timesheet.time_spent }}</td>
+                    <td><a class="bg-blue-500 shadow-xl p-2 rounded-md text-white" href="{% url 'delete_track' timesheet.id %}">Delete</a></td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <p class='text-center text-lg'>Your daily project entries will be displayed here.</p>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+        
+    </main>
+</body>
+<script src="../../static/js/messages.js"></script>
+</html>

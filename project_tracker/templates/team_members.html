@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/morestyles.css' %}">
+</head>
+<body class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+    <header class="container mx-auto text-white p-8" >
+        <nav class="flex justify-around font-medium">
+            <div class="font-semibold text-3xl flex-1">
+                <a class="decoration-0 " href="{% url 'home' %}">Project Tracker</a>
+            </div>
+            <ul class="decoration-0 flex gap-x-8">
+                <li ><a href="{% url 'home' %}">Clients</a></li>
+                <li ><a href="{% url 'projects' %}">Projects</a></li>
+                <li><a href="{% url 'team' %}">Team Members</a></li>
+                <li><a href="{% url 'track' %}">Track</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul> 
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-8">
+        <div class="flex justify-between mb-8" style="gap: 30px;">
+            <h1 class="text-white text-2xl font-medium">Team Members</h1>
+            <a class="bg-blue-500 shadow-xl p-2 rounded-md text-white" href="add_member/">+ Invite</a>
+        </div>
+        {% for message in messages %}
+            <div class="fixed">
+                {{ message }}
+                <span onclick="handleClick(this)" class="close-button">&times;</span>
+            </div>
+        {% endfor %}
+        <div class="rounded-md bg-white p-8">
+            <table>
+                {% if mymembers %}
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Project</th>
+                    <th>Role</th>  
+                </tr>
+                <tr>
+                {% for member in mymembers %}
+                    <td>{{ member.member_name }}</td>
+                    <td>{{ member.member_email }}</td>
+                    <td>{{ member.project }}</td>
+                    <td>{{ member.member_role }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <p class='text-center text-lg'>This view will show members of your project</p>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+    </main>
+</body>
+<script src="../../static/js/messages.js"></script>
+</html>
