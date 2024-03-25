@@ -120,8 +120,10 @@ def delete_client(request, pk):
 @allowed_users(allowed_roles=['Admin'])
 def projects(request):
     """projects template"""
-    myprojects = Project.objects.filter(company = request.user.company).all()
-    return render(request, "projects.html", {"myprojects": myprojects, "username": request.user.username})
+    clients = request.user.company.clients.all()
+    myprojects = Project.objects.filter(client__in=clients)
+    username = request.user.username
+    return render(request, "projects.html", {"myprojects": myprojects, "username": username})
 
 @allowed_users(allowed_roles=['Admin'])
 def add_projects(request):
@@ -131,7 +133,6 @@ def add_projects(request):
         project = form.save(commit=False)
         if 'client' in form.cleaned_data:
             project.client = form.cleaned_data['client']
-            project.company = request.user.company
             project.save()
             messages.success(request, 'Project added successfully')
             return redirect("projects")
@@ -149,7 +150,6 @@ def update_project(request, pk):
         project = form.save()
         if 'client' in form.cleaned_data:
             project.client = form.cleaned_data['client']
-            project.company = request.user.company
             messages.success(request, 'Project updated successfully')
             project.save()
     else:
@@ -167,7 +167,9 @@ def delete_project(request, pk):
 @allowed_users(allowed_roles=['Admin'])
 def team(request):
     """team members template"""
-    mymembers = Member.objects.filter(company = request.user.company).all()
+    clients = request.user.company.clients.all()
+    myprojects = Project.objects.filter(client__in=clients)
+    mymembers = Member.objects.filter(project__in=myprojects)
     return render(request, "team_members.html", {"mymembers":mymembers})
 
 @allowed_users(allowed_roles=['Admin'])
@@ -177,7 +179,6 @@ def add_team(request):
         form = CreateMember(request.user, request.POST)
         member = form.save(commit=False)
         member.project = form.cleaned_data['project']
-        member.company = request.user.company
         member.save()
         send_mail(
             "Welcome to Project Tracker",
@@ -194,7 +195,8 @@ def add_team(request):
 
     else:
         form = CreateMember(request.user)
-        myprojects = Project.objects.filter(company = request.user.company).all()
+        clients = request.user.company.clients.all()
+        myprojects = Project.objects.filter(client__in=clients)
     return render(request, "add_member.html", {"form":form, "myprojects":myprojects})
 
 def member_login(request):

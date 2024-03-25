@@ -6,7 +6,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from .models import Client, Company, Project, Member, RegisterHours
 
 
-class CreateClient(forms.ModelForm):    
+class CreateClient(forms.ModelForm):
     """client form"""
     client_contact = PhoneNumberField()
     class Meta:
@@ -43,7 +43,8 @@ class CreateMember(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if hasattr(user, 'company') and user.company:
-            self.fields['project'].queryset = Project.objects.filter(company = user.company).all()
+            clients = user.company.clients.all()
+            self.fields['project'].queryset = Project.objects.filter(client__in=clients)
         else:
             self.fields['project'].queryset = Project.objects.none()
 
@@ -63,7 +64,8 @@ class RegisterTime(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if user.groups.filter(name='Admin').exists() and hasattr(user, 'company'):
-            self.fields['project'].queryset = Project.objects.filter(company=user.company)
+            clients = user.company.clients.all()
+            self.fields['project'].queryset = Project.objects.filter(client__in=clients)
         elif user.groups.filter(name='Member').exists():
             member = Member.objects.get(member_email=user.email)
             print(member)

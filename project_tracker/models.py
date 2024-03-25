@@ -23,7 +23,7 @@ class Company(models.Model):
 
 class Client(models.Model):
     """client model"""
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, related_name = 'clients')
     client_name = models.CharField(max_length=255)
     client_contact = PhoneNumberField(null=True)
 
@@ -38,19 +38,17 @@ class Client(models.Model):
 
 class Project(models.Model):
     """project model"""
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name = 'projects')
     project_name = models.CharField(max_length=255)
     project_created = models.DateTimeField(auto_now_add=True, null=True)
-    project_deadline = models.DateField(default = datetime.today())
+    project_deadline = models.DateField()
 
     def __str__(self):
         return f"{self.project_name}"
 
 class Member(models.Model):
     """member model"""
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name = 'members')
     member_name = models.CharField(max_length=255)
     member_email = models.EmailField(max_length=50)
     CHOICES = [
