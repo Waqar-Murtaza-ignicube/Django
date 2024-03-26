@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 # import os
 # import dj_database_url
 from pathlib import Path
+import os
 # from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -127,6 +128,13 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR,  'templates'),
+    # Add to this list all the locations containing your static files 
+)
 
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressManifestStaticFilesStorage'
 
