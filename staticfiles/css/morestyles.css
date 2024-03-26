@@ -1,0 +1,64 @@
+tr, td {
+    text-align: left;
+    padding: 10px 0;
+}
+
+table {
+    width : 100%;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.w-30 {
+    width: 30%;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+}
+
+.bg-gray-100{
+    background-color: rgb(243 244 246);
+}
+
+.text-lg{
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.75rem; /* 28px */
+}
+
+.p-8{
+    padding: 2rem;
+}
+
+.mt-6 {
+    margin-top: 1.5rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem; /* 24px */
+    line-height: 2rem; /* 32px */
+}
+
+.fixed {
+    position: fixed;
+    top: 50px; /* Adjust as needed */
+    left: 50%; /* Align horizontally to the center */
+    transform: translateX(-50%);
+    background-color: #007bff; /* Blue color */
+    color: #ffffff; /* White text color */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}   
+
+.fixed .close-button {
+    cursor: pointer;
+    padding: 5px;
+}
+
+.fixed .close-button:hover {
+    color: #cccccc;
+}
