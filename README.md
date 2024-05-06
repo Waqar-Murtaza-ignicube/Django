@@ -1,2 +1,2 @@
 # Django
-django_site
+hour tracking website using pure django
