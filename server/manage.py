@@ -6,7 +6,8 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tracker.settings')
+    if 'DJANGO_SETTINGS_MODULE' not in os.environ or os.environ['DJANGO_SETTINGS_MODULE'] != 'tracker.settings.prod':
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tracker.settings.dev')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
